@@ -5,6 +5,8 @@ class Utils(object):
     
     @staticmethod
     def build_batch(path_tfrecords, num_example, batch_size, shuffled):
+        
+        # this batch is built according to https://arxiv.org/pdf/1312.6082.pdf Section 5.1
         filenames = tf.train.string_input_producer([path_tfrecords], num_epochs=None)
         tfreader = tf.TFRecordReader()
         _, serialized_example = tfreader.read(filenames)
