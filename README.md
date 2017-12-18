@@ -15,3 +15,8 @@ Boot Disk: standard persistent disk 100G
 CPU platform: Intel Haswell
 
 GPUs: 1 x NVIDIA Tesla K80
+
+## Usage
+Processing Data_preprocessing.ipynb
+
+Processing model_train.ipynb
