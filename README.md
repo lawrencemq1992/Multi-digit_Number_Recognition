@@ -17,6 +17,6 @@ CPU platform: Intel Haswell
 GPUs: 1 x NVIDIA Tesla K80
 
 ## Usage
-Processing Data_preprocessing.ipynb
+Preprocessing: Data_preprocessing.ipynb
 
-Processing model_train.ipynb
+Training and Evaluation: model_train.ipynb
