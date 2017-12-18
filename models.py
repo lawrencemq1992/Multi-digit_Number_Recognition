@@ -11,7 +11,7 @@ class Models(object):
         num_batches = num_examples / batch_size
         with tf.Graph().as_default():
             image_batch, length_batch, digits_batch = Utils.build_batch(
-                path_tfrecords, num_examples, batch_size, False) # shuffled = True  
+                path_tfrecords, num_examples, batch_size, False) # shuffled = False
             length, digits = Models.cnn_inference(image_batch, 0.0) # drop_rate = 0.0
             length_max = tf.argmax(length, axis=1)
             digits_max = tf.argmax(digits, axis=2)
@@ -54,71 +54,62 @@ class Models(object):
         # feedforward
         # https://arxiv.org/pdf/1312.6082.pdf Section 5.1
         with tf.variable_scope('hidden1'):
-            conv = tf.layers.conv2d(image, filters=48, kernel_size=[5, 5], padding='same')
-            norm = tf.layers.batch_normalization(conv)
+            conv2d = tf.layers.conv2d(image, filters=48, kernel_size=[5, 5], padding='same')
+            norm = tf.layers.batch_normalization(conv2d)
             activation = tf.nn.relu(norm)
             pool = tf.layers.max_pooling2d(activation, pool_size=[2, 2], strides=2, padding='same')
             dropout = tf.layers.dropout(pool, rate=drop_rate)
             hidden1 = dropout
-
         with tf.variable_scope('hidden2'):
-            conv = tf.layers.conv2d(hidden1, filters=64, kernel_size=[5, 5], padding='same')
-            norm = tf.layers.batch_normalization(conv)
+            conv2d = tf.layers.conv2d(hidden1, filters=64, kernel_size=[5, 5], padding='same')
+            norm = tf.layers.batch_normalization(conv2d)
             activation = tf.nn.relu(norm)
             pool = tf.layers.max_pooling2d(activation, pool_size=[2, 2], strides=1, padding='same')
             dropout = tf.layers.dropout(pool, rate=drop_rate)
             hidden2 = dropout
-
         with tf.variable_scope('hidden3'):
-            conv = tf.layers.conv2d(hidden2, filters=128, kernel_size=[5, 5], padding='same')
-            norm = tf.layers.batch_normalization(conv)
+            conv2d = tf.layers.conv2d(hidden2, filters=128, kernel_size=[5, 5], padding='same')
+            norm = tf.layers.batch_normalization(conv2d)
             activation = tf.nn.relu(norm)
             pool = tf.layers.max_pooling2d(activation, pool_size=[2, 2], strides=2, padding='same')
             dropout = tf.layers.dropout(pool, rate=drop_rate)
             hidden3 = dropout
-
         with tf.variable_scope('hidden4'):
-            conv = tf.layers.conv2d(hidden3, filters=160, kernel_size=[5, 5], padding='same')
-            norm = tf.layers.batch_normalization(conv)
+            conv2d = tf.layers.conv2d(hidden3, filters=160, kernel_size=[5, 5], padding='same')
+            norm = tf.layers.batch_normalization(conv2d)
             activation = tf.nn.relu(norm)
             pool = tf.layers.max_pooling2d(activation, pool_size=[2, 2], strides=1, padding='same')
             dropout = tf.layers.dropout(pool, rate=drop_rate)
             hidden4 = dropout
-
         with tf.variable_scope('hidden5'):
-            conv = tf.layers.conv2d(hidden4, filters=192, kernel_size=[5, 5], padding='same')
-            norm = tf.layers.batch_normalization(conv)
+            conv2d = tf.layers.conv2d(hidden4, filters=192, kernel_size=[5, 5], padding='same')
+            norm = tf.layers.batch_normalization(conv2d)
             activation = tf.nn.relu(norm)
             pool = tf.layers.max_pooling2d(activation, pool_size=[2, 2], strides=2, padding='same')
             dropout = tf.layers.dropout(pool, rate=drop_rate)
             hidden5 = dropout
-
         with tf.variable_scope('hidden6'):
-            conv = tf.layers.conv2d(hidden5, filters=192, kernel_size=[5, 5], padding='same')
-            norm = tf.layers.batch_normalization(conv)
+            conv2d = tf.layers.conv2d(hidden5, filters=192, kernel_size=[5, 5], padding='same')
+            norm = tf.layers.batch_normalization(conv2d)
             activation = tf.nn.relu(norm)
             pool = tf.layers.max_pooling2d(activation, pool_size=[2, 2], strides=1, padding='same')
             dropout = tf.layers.dropout(pool, rate=drop_rate)
             hidden6 = dropout
-
         with tf.variable_scope('hidden7'):
-            conv = tf.layers.conv2d(hidden6, filters=192, kernel_size=[5, 5], padding='same')
-            norm = tf.layers.batch_normalization(conv)
+            conv2d = tf.layers.conv2d(hidden6, filters=192, kernel_size=[5, 5], padding='same')
+            norm = tf.layers.batch_normalization(conv2d)
             activation = tf.nn.relu(norm)
             pool = tf.layers.max_pooling2d(activation, pool_size=[2, 2], strides=2, padding='same')
             dropout = tf.layers.dropout(pool, rate=drop_rate)
             hidden7 = dropout
-
         with tf.variable_scope('hidden8'):
-            conv = tf.layers.conv2d(hidden7, filters=192, kernel_size=[5, 5], padding='same')
-            norm = tf.layers.batch_normalization(conv)
+            conv2d = tf.layers.conv2d(hidden7, filters=192, kernel_size=[5, 5], padding='same')
+            norm = tf.layers.batch_normalization(conv2d)
             activation = tf.nn.relu(norm)
             pool = tf.layers.max_pooling2d(activation, pool_size=[2, 2], strides=1, padding='same')
             dropout = tf.layers.dropout(pool, rate=drop_rate)
             hidden8 = dropout
-            
         flatten = tf.reshape(hidden, [-1, 3072])  # 3072 = 4 * 4 * 192
-        
         with tf.variable_scope('hidden9'):
             dense = tf.layers.dense(flatten, units=3072, activation=tf.nn.relu)
             hidden9 = dense
